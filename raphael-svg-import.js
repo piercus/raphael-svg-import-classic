@@ -23,11 +23,23 @@ Raphael.fn.importSVG = function (svgXML) {
         return;
       }
       var attr = {"stroke": "transparent", "stroke-width": 0, "fill":"#000"}, i;
+      
+      //Sometimes svg attributes are store as cssRules
+      if(elShape.attributes && elShape.attributes.style){
+        var cssRules = elShape.attributes.style.value.split(";");
+        for(var i = 0; i< cssRules.length; i ++){
+          var a = cssRules[i].split(":")[0],
+              v = cssRules[i].split(":")[1];
+          elShape.setAttribute(a,v);
+        }
+      }
+      
       if (elShape.attributes){
         for (i = elShape.attributes.length - 1; i >= 0; --i){
           attr[elShape.attributes[i].name] = elShape.attributes[i].value;
         }
       }
+
       var shape, style;
       var shapeName = elShape.nodeName;
       switch(shapeName) {
